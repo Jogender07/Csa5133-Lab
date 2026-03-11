@@ -1,214 +1,103 @@
-OR FUNCTION
-3	+
-def xor(a, b):
-4	+
-    result = ""
-5	+
+def xor(a,b):
+    result=""
     for i in range(len(a)):
-6	+
-        if a[i] == b[i]:
-7	+
-            result += "0"
-8	+
+        if a[i]==b[i]:
+            result+="0"
         else:
-9	+
-            result += "1"
-10	+
+            result+="1"
     return result
-11	+
-12	+
-13	+
-# SIMPLIFIED DES ENCRYPT
-14	+
-def des_encrypt(text, key):
-15	+
-16	+
+
+
+def des_encrypt(text,key):
+
     left = text[:32]
-17	+
     right = text[32:]
-18	+
-19	+
+
     for i in range(16):
-20	+
+
         temp = right
-21	+
-        f = xor(right, key[:32])   # simple round function
-22	+
-        right = xor(left, f)
-23	+
+
+        right = xor(left,key[:32])
+
         left = temp
-24	+
-25	+
+
     return right + left
-26	+
-27	+
-28	+
-# -------------------------
-29	+
-# SIMPLIFIED DES DECRYPT
-30	+
-# -------------------------
-31	+
-def des_decrypt(text, key):
-32	+
-33	+
+
+
+def des_decrypt(text,key):
+
     left = text[:32]
-34	+
     right = text[32:]
-35	+
-36	+
+
     for i in range(16):
-37	+
+
         temp = right
-38	+
-        f = xor(right, key[:32])
-39	+
-        right = xor(left, f)
-40	+
+
+        right = xor(left,key[:32])
+
         left = temp
-41	+
-42	+
+
     return right + left
-43	+
-44	+
-45	+
+
+
 # -------------------------
-46	+
-# TRIPLE DES ALGORITHM
-47	+
-# EDE MODE
-48	+
+# TRIPLE DES
 # -------------------------
-49	+
-50	+
+
 def triple_des_encrypt(plaintext, k1, k2, k3):
-51	+
-52	+
-    # Step 1: Encrypt with Key1
-53	+
+
     step1 = des_encrypt(plaintext, k1)
-54	+
-55	+
-    # Step 2: Decrypt with Key2
-56	+
+
     step2 = des_decrypt(step1, k2)
-57	+
-58	+
-    # Step 3: Encrypt with Key3
-59	+
+
     cipher = des_encrypt(step2, k3)
-60	+
-61	+
+
     return cipher
-62	+
-63	+
-64	+
+
+
 def triple_des_decrypt(cipher, k1, k2, k3):
-65	+
-66	+
-    # Step 1: Decrypt with Key3
-67	+
+
     step1 = des_decrypt(cipher, k3)
-68	+
-69	+
-    # Step 2: Encrypt with Key2
-70	+
+
     step2 = des_encrypt(step1, k2)
-71	+
-72	+
-    # Step 3: Decrypt with Key1
-73	+
+
     plaintext = des_decrypt(step2, k1)
-74	+
-75	+
+
     return plaintext
-76	+
-77	+
-78	+
-# -------------------------
-79	+
-# MAIN PROGRAM
-80	+
-# -------------------------
-81	+
-82	+
-print("\nTRIPLE DES IMPLEMENTATION")
-83	+
+
+
+
+print("TRIPLE DES")
 print("1. Encrypt")
-84	+
 print("2. Decrypt")
-85	+
-86	+
+
 choice = int(input("Enter choice: "))
-87	+
-88	+
+
 if choice == 1:
-89	+
-90	+
+
     plaintext = input("Enter 64-bit binary plaintext: ")
-91	+
-92	+
-    if len(plaintext) != 64:
-93	+
-        print("Error: Plaintext must be exactly 64 bits")
-94	+
-        exit()
-95	+
-96	+
-    k1 = input("Enter Key1 (48 bits): ")
-97	+
-    k2 = input("Enter Key2 (48 bits): ")
-98	+
-    k3 = input("Enter Key3 (48 bits): ")
-99	+
-100	+
-    if len(k1) != 48 or len(k2) != 48 or len(k3) != 48:
-101	+
-        print("Error: Each key must be 48 bits")
-102	+
-        exit()
-103	+
-104	+
+
+    k1 = input("Enter Key1 (48 bit): ")
+    k2 = input("Enter Key2 (48 bit): ")
+    k3 = input("Enter Key3 (48 bit): ")
+
     cipher = triple_des_encrypt(plaintext, k1, k2, k3)
-105	+
-106	+
-    print("\nCipher Text:", cipher)
-107	+
-108	+
-109	+
+
+    print("Cipher Text:", cipher)
+
+
 elif choice == 2:
-110	+
-111	+
-    cipher = input("Enter 64-bit cipher text: ")
-112	+
-113	+
-    if len(cipher) != 64:
-114	+
-        print("Error: Cipher text must be 64 bits")
-115	+
-        exit()
-116	+
-117	+
-    k1 = input("Enter Key1 (48 bits): ")
-118	+
-    k2 = input("Enter Key2 (48 bits): ")
-119	+
-    k3 = input("Enter Key3 (48 bits): ")
-120	+
-121	+
-    if len(k1) != 48 or len(k2) != 48 or len(k3) != 48:
-122	+
-        print("Error: Each key must be 48 bits")
-123	+
-        exit()
-124	+
-125	+
+
+    cipher = input("Enter cipher text: ")
+
+    k1 = input("Enter Key1 (48 bit): ")
+    k2 = input("Enter Key2 (48 bit): ")
+    k3 = input("Enter Key3 (48 bit): ")
+
     plaintext = triple_des_decrypt(cipher, k1, k2, k3)
-126	+
-127	+
-    print("\nDecrypted Text:", plaintext)
-128	+
-129	+
+
+    print("Decrypted Text:", plaintext)
+
 else:
-130	+
+
     print("Invalid Choice")
